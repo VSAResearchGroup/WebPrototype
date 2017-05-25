@@ -7,8 +7,8 @@
  * # data
  * Factory in the vsaWebApp.
  */
-angular.module('vsaWebApp')
-  .factory('data', function () {
+ angular.module('vsaWebApp')
+ .factory('data', function () {
     // Service logic
     // ...
 
@@ -17,89 +17,89 @@ angular.module('vsaWebApp')
         "Plan-1": {
           "Quarter-1": {
             "coursesSuggested": [
-              "CSS175",
-              "CSS161",
-              "CSS181"
+            "CSS175",
+            "CSS161",
+            "CSS181"
             ]
           },
           "Quarter-2": {
             "coursesSuggested": [
-              "CSS341"
+            "CSS341"
             ]
           },
           "Quarter-3": {
             "coursesSuggested": [
-              "CSS220"
+            "CSS220"
             ]
           }
         },
-       "Plan-2": {
+        "Plan-2": {
           "Quarter-1": {
             "coursesSuggested": [
-              "CSS175",
-              "CSS181"
+            "CSS175",
+            "CSS181"
             ]
           },
           "Quarter-2": {
             "coursesSuggested": [
-              "CSS182"
+            "CSS182"
             ]
           },
           "Quarter-3": {
             "coursesSuggested": [
-              "CSS341"
+            "CSS341"
             ]
           },
           "Quarter-4": {
             "coursesSuggested": [
-              "CSS220"
+            "CSS220"
             ]
           }
-       },
-       "Plan-3": {
+        },
+        "Plan-3": {
          "Quarter-1": {
            "coursesSuggested": [
-             "CSS175",
-             "CSS161",
-             "CSS181"
+           "CSS175",
+           "CSS161",
+           "CSS181"
            ]
          },
          "Quarter-2": {
            "coursesSuggested": [
-             "CSS341"
+           "CSS341"
            ]
          },
          "Quarter-3": {
            "coursesSuggested": [
-             "CSS344"
+           "CSS344"
            ]
          }
        },
        "Plan-4": {
          "Quarter-1": {
            "coursesSuggested": [
-             "CSS175",
-             "CSS181"
+           "CSS175",
+           "CSS181"
            ]
          },
          "Quarter-2": {
            "coursesSuggested": [
-             "CSS182"
+           "CSS182"
            ]
          },
          "Quarter-3": {
            "coursesSuggested": [
-             "CSS341"
+           "CSS341"
            ]
          },
          "Quarter-4": {
            "coursesSuggested": [
-             "CSS344"
+           "CSS344"
            ]
          }
-      } 
-    }
-    }
+       } 
+     }
+   };
 
     // Public API here
     return {
