@@ -8,7 +8,7 @@
  * Controller of the vsaWebApp
  */
 angular.module('vsaWebApp')
-  .controller('MainCtrl', function ($scope ,data) {
+  .controller('MainCtrl', function ($scope , $http, $sce, data) {
     $scope.output = data.getResult().plans;
     $scope.role = 'Student';
     $scope.electiveCourses = {
@@ -108,4 +108,13 @@ angular.module('vsaWebApp')
         $scope.courseInputs[plan][quarter] = "";
     }
 
+
+    var url = "http://virtualstudentadviserapi.azurewebsites.net/api/vsa/256";
+    $http.get(url)
+    .then(function(result) {
+        console.log(result.data);
+    }, function(error){
+        console.log("error");
+        console.log(error);
+    });
   });
