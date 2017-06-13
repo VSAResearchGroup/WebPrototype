@@ -1,143 +1,45 @@
 <!-- Single button -->
 <div class="btn-group" uib-dropdown>
   <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle="true">
-    {{role}} <span class="caret"></span>
+    {{school.value}} <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-    <li role="menuitem" ng-click="changeRole('Advisor')"><a>Advisor</a></li>
-    <li role="menuitem" ng-click="changeRole('Student')"><a>Student</a></li>
+    <li role="menuitem" ng-repeat="school in schools" ng-click="changeSchool(school)"><a>{{school.value}}</a></li>
   </ul>
 </div>
 
-<!-- student role -->
-<div ng-show="role=='Student'">
-  <uib-accordion close-others>
-    <div uib-accordion-group class="panel-default" heading="{{plan}}" ng-repeat="(plan, planObj) in output">
-      <div class="row">
-        <div class="col-md-3">
-          <span><b>Fall</b></span><br>
-          <span ng-repeat="course in planObj['Quarter-1']['coursesSuggested']">{{course}}<br></span>
-          <!-- Added courses-->
-          <span ng-repeat="course in electiveCourses[plan]['Quarter-1']['coursesSuggested']">
-            {{course}}
-            <button type="button" class="btn btn-danger" ng-click="deleteCourse(electiveCourses, plan, 'Quarter-1', $index)">
-              <i class="glyphicon glyphicon glyphicon-minus-sign"></i>
-            </button> 
-          </span>  
-          <!-- Add course-->
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="enter your course" ng-model="courseInputs[plan]['Quarter-1']">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-success" ng-click="addCourse(plan, 'Quarter-1', courseInputs[plan]['Quarter-1'])">
-                <i class="glyphicon glyphicon glyphicon-plus-sign"></i>
-              </button>  
-            </span>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <span><b>Winter</b></span><br>
-          <span ng-repeat="course in planObj['Quarter-2']['coursesSuggested']">{{course}}<br></span>
-          <span ng-repeat="course in electiveCourses[plan]['Quarter-2']['coursesSuggested']">
-            {{course}}
-            <button type="button" class="btn btn-danger" ng-click="deleteCourse(electiveCourses, plan, 'Quarter-2', $index)">
-              <i class="glyphicon glyphicon glyphicon-minus-sign"></i>
-            </button> 
-          </span>  
-          <!-- Add course-->
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="enter your course" ng-model="courseInputs[plan]['Quarter-2']">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-success" ng-click="addCourse(plan, 'Quarter-2', courseInputs[plan]['Quarter-2'])">
-                <i class="glyphicon glyphicon glyphicon-plus-sign"></i>
-              </button>  
-            </span>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <span><b>Spring</b></span><br>
-          <span ng-repeat="course in planObj['Quarter-3']['coursesSuggested']">{{course}}<br></span>
-          <span ng-repeat="course in electiveCourses[plan]['Quarter-3']['coursesSuggested']">
-            {{course}}
-            <button type="button" class="btn btn-danger" ng-click="deleteCourse(electiveCourses, plan, 'Quarter-3', $index)">
-              <i class="glyphicon glyphicon glyphicon-minus-sign"></i>
-            </button> 
-          </span>  
-          <!-- Add course-->
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="enter your course" ng-model="courseInputs[plan]['Quarter-3']">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-success" ng-click="addCourse(plan, 'Quarter-3', courseInputs[plan]['Quarter-3'])">
-                <i class="glyphicon glyphicon glyphicon-plus-sign"></i>
-              </button>  
-            </span>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <span><b>Summer</b></span><br>
-          <span ng-repeat="course in planObj['Quarter-4']['coursesSuggested']">{{course}}<br></span>
-          <span ng-repeat="course in electiveCourses[plan]['Quarter-4']['coursesSuggested']">
-            {{course}}
-            <button type="button" class="btn btn-danger" ng-click="deleteCourse(electiveCourses, plan, 'Quarter-4', $index)">
-              <i class="glyphicon glyphicon glyphicon-minus-sign"></i>
-            </button> 
-          </span>  
-          <!-- Add course-->
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="enter your course" ng-model="courseInputs[plan]['Quarter-4']">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-success" ng-click="addCourse(plan, 'Quarter-4', courseInputs[plan]['Quarter-4'])">
-                <i class="glyphicon glyphicon glyphicon-plus-sign"></i>
-              </button>  
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </uib-accordion>
+<div class="btn-group" uib-dropdown>
+  <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle="true">
+    {{major.value}} <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+    <li role="menuitem" ng-repeat="major in majors" ng-click="changeMajor(major)"><a>{{major.value}}</a></li>
+  </ul>
 </div>
 
-<!-- advisor role -->
-<div ng-show="role=='Advisor'">
-  <uib-accordion close-others>
-    <div uib-accordion-group class="panel-default" heading="{{plan}}" ng-repeat="(plan, planObj) in output">
-      <div class="row">
-        <div class="col-md-3">
-          <span><b>Fall</b></span><br>
-          <div uib-alert ng-repeat="course in planObj['Quarter-1']['coursesSuggested']" class='alert-warning' close="deleteCourse(output, plan, 'Quarter-1', $index)">
-           {{course}}
-          </div>
-          <div uib-alert ng-repeat="course in electiveCourses[plan]['Quarter-1']['coursesSuggested']" class='alert-success' close="deleteCourse(electiveCourses, plan, 'Quarter-1', $index)">
-           {{course}}
-         </div>
-        </div>
-        <div class="col-md-3">
-          <span><b>Winter</b></span><br>
-          <div uib-alert ng-repeat="course in planObj['Quarter-2']['coursesSuggested']" class='alert-warning' close="deleteCourse(output, plan, 'Quarter-2', $index)">
-            {{course}}
-          </div>
-          <div uib-alert ng-repeat="course in electiveCourses[plan]['Quarter-2']['coursesSuggested']" class='alert-success' close="deleteCourse(electiveCourses, plan, 'Quarter-2', $index)">
-            {{course}}
-          </div>
-        </div>
-        <div class="col-md-3">
-          <span><b>Spring</b></span><br>
-          <div uib-alert ng-repeat="course in planObj['Quarter-3']['coursesSuggested']" class='alert-warning' close="deleteCourse(output, plan, 'Quarter-3', $index)">
-            {{course}}
-          </div>
-          <div uib-alert ng-repeat="course in electiveCourses[plan]['Quarter-3']['coursesSuggested']" class='alert-success' close="deleteCourse(electiveCourses, plan, 'Quarter-3', $index)">
-            {{course}}
-          </div>
-        </div>
-        <div class="col-md-3">
-          <span><b>Summer</b></span><br>
-          <div uib-alert ng-repeat="course in planObj['Quarter-4']['coursesSuggested']" class='alert-warning' close="deleteCourse(output, plan, 'Quarter-4', $index)">
-            {{course}}
-          </div>
-          <div uib-alert ng-repeat="course in electiveCourses[plan]['Quarter-4']['coursesSuggested']" class='alert-success' close="deleteCourse(electiveCourses, plan, 'Quarter-4', $index)">
-            {{course}}
-          </div>
+<uib-accordion close-others>
+  <div uib-accordion-group class="panel-default" heading="plan - {{plan}}" ng-repeat="(plan, planObj) in output">
+    <div class="row" style="border-style: ridge;" ng-repeat="(year, yearPlan) in planObj">
+      <div class="col-md-3" ng-repeat="(quarter, courses) in yearPlan">
+        <span><b>{{year}} - {{quarter}}</b></span><br>
+        <span ng-repeat="course in courses">{{course}}<br></span>
+        <!-- Added courses-->
+        <span ng-repeat="course in electiveCourses[year][quarter]">
+          {{course}}
+          <button type="button" class="btn btn-danger" ng-click="deleteCourse(electiveCourses, year, quarter, $index)">
+            <i class="glyphicon glyphicon glyphicon-minus-sign"></i>
+          </button> 
+        </span>  
+        <!-- Add course-->
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="enter your course" ng-model="courseInputs[year][quarter]">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-success" ng-click="addCourse(year, quarter, courseInputs[year][quarter])">
+              <i class="glyphicon glyphicon glyphicon-plus-sign"></i>
+            </button>  
+          </span>
         </div>
       </div>
     </div>
-  </uib-accordion>
-</div>
+  </div>
+</uib-accordion>

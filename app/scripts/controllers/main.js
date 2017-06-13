@@ -8,113 +8,101 @@
  * Controller of the vsaWebApp
  */
 angular.module('vsaWebApp')
-  .controller('MainCtrl', function ($scope , $http, $sce, data) {
-    $scope.output = data.getResult().plans;
-    $scope.role = 'Student';
-    $scope.electiveCourses = {
-        "Plan-1": {
-          "Quarter-1": {
-            "coursesSuggested": []
-          },
-          "Quarter-2": {
-            "coursesSuggested": []
-          },
-          "Quarter-3": {
-            "coursesSuggested": []
-          },
-          "Quarter-4": {
-            "coursesSuggested": []
-          }
-        },
-        "Plan-2": {
-          "Quarter-1": {
-            "coursesSuggested": []
-          },
-          "Quarter-2": {
-            "coursesSuggested": []
-          },
-          "Quarter-3": {
-            "coursesSuggested": []
-          },
-          "Quarter-4": {
-            "coursesSuggested": []
-          }
-        },
-        "Plan-3": {
-         "Quarter-1": {
-           "coursesSuggested": []
-         },
-         "Quarter-2": {
-           "coursesSuggested": []
-         },
-         "Quarter-3": {
-           "coursesSuggested": []
-         },
-         "Quarter-4": {
-            "coursesSuggested": []
-          }
-       },
-       "Plan-4": {
-         "Quarter-1": {
-           "coursesSuggested": []
-         },
-         "Quarter-2": {
-           "coursesSuggested": []
-         },
-         "Quarter-3": {
-           "coursesSuggested": []
-         },
-         "Quarter-4": {
-           "coursesSuggested": []
-         }
-       } 
-     };
+  .controller('MainCtrl', function ($scope , $http, data) {
+    // $scope.output = data.getResult().plans;
+    $scope.schools = data.getSchoolNames();
+    $scope.school = $scope.schools[0];
+    $scope.majors = data.getMajors();
+    $scope.major = $scope.majors[0];
+    var plans = data.getPlans();
+    $scope.schoolPlans = plans[$scope.school.id][$scope.major.id];
+
+    $scope.electiveCourses = {};
     $scope.courseInputs = {
-        "Plan-1": {
-          "Quarter-1": "",
-          "Quarter-2": "",
-          "Quarter-3": ""
-        },
-        "Plan-2": {
-          "Quarter-1": "",
-          "Quarter-2": "",
-          "Quarter-3": "",
-          "Quarter-4": ""
-        },
-        "Plan-3": {
-         "Quarter-1": "",
-         "Quarter-2": "",
-         "Quarter-3": ""
-       },
-       "Plan-4": {
-         "Quarter-1": "",
-         "Quarter-2": "",
-         "Quarter-3": "",
-         "Quarter-4": ""
-       } 
-     };
-    $scope.deleteCourse = function(targetObj, planName, quarterName, index){
-        targetObj[planName][quarterName]["coursesSuggested"].splice(index, 1);
+        2017: {
+            Fall:[],
+            Spring:[],
+            Summer:[],
+            Winter:[]
+        }
+    };
+    $scope.deleteCourse = function(targetObj, year, quarterName, index){
+        targetObj[year][quarterName].splice(index, 1);
     	//$scope.output[planName][quarterName]["coursesSuggested"].splice(index, 1);
     };
 
-    $scope.changeRole = function(value){
-        $scope.role = value;
+    $scope.changeSchool = function(value){
+        $scope.school = value;
+        $scope.schoolPlans = plans[$scope.school.id][$scope.major.id];
+        getPlans($scope.schoolPlans, 0);
+        // console.log($scope.schoolPlans);
+    };
+    $scope.changeMajor = function(value){
+        $scope.major = value;
+        $scope.schoolPlans = plans[$scope.school.id][$scope.major.id];
+        getPlans($scope.schoolPlans, 0);
+        // console.log($scope.schoolPlans);
     };
 
-    $scope.addCourse = function(plan, quarter, value){
+    $scope.addCourse = function(year, quarter, value){
         if(value == "" || value == undefined) {return;}
-        $scope.electiveCourses[plan][quarter]["coursesSuggested"].push(value);
-        $scope.courseInputs[plan][quarter] = "";
+        if($scope.electiveCourses[year] == undefined) {
+             $scope.electiveCourses[year] = {};
+        }
+        if( $scope.electiveCourses[year][quarter] == undefined) {
+             $scope.electiveCourses[year][quarter] = [];
+        }
+
+         $scope.electiveCourses[year][quarter].push(value);
     }
 
+    /**
+        Transform API result to
+        {
+            2016: {
+                Fall:[course1, course2],
+                Spring:[],
+                Summer:[],
+                Winter:[]
+            },
+            2017:{...}
+        }
+    **/
+    var transformApi = function(result){
+        var output = {};
+        for (var i =0; i < result.length; i++) {
+            var planElement = result[i];
+            if(output[planElement.year] == undefined) {
+                output[planElement.year] = {};
+            }
+            if(output[planElement.year][planElement.quarter] == undefined) {
+                output[planElement.year][planElement.quarter] = [];
+            }
 
-    var url = "http://virtualstudentadviserapi.azurewebsites.net/api/vsa/256";
-    $http.get(url)
-    .then(function(result) {
-        console.log(result.data);
-    }, function(error){
-        console.log("error");
-        console.log(error);
-    });
+            output[planElement.year][planElement.quarter].push(planElement.courseNumber);
+        }
+        return output;
+    };
+
+    var getPlans = function(planIds, index){
+        if(index == 0 ){
+            $scope.output = {};    
+        }
+        
+        var planId = planIds[index];
+        var url = "http://virtualstudentadviserapi.azurewebsites.net/api/vsa/"+planId;
+        $http.get(url)
+        .then(function(result) {
+            $scope.output[planId] = transformApi(result.data);
+            if(index+1 < planIds.length){
+                getPlans(planIds, index+1);
+            }
+            // console.log($scope.output);        
+        }, function(error){
+            console.log(error);
+        });
+    };
+
+    getPlans($scope.schoolPlans, 0);
+    
   });
