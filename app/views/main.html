@@ -24,17 +24,18 @@
         <span><b>{{year}} - {{quarter}}</b></span><br>
         <span ng-repeat="course in courses">{{course}}<br></span>
         <!-- Added courses-->
-        <span ng-repeat="course in electiveCourses[year][quarter]">
+        <span ng-repeat="course in electiveCourses[plan][year][quarter]">
           {{course}}
-          <button type="button" class="btn btn-danger" ng-click="deleteCourse(electiveCourses, year, quarter, $index)">
+          <button type="button" class="btn btn-danger" ng-click="deleteCourse(electiveCourses, plan, year, quarter, $index)">
             <i class="glyphicon glyphicon glyphicon-minus-sign"></i>
           </button> 
+          <br>
         </span>  
         <!-- Add course-->
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="enter your course" ng-model="courseInputs[year][quarter]">
+          <input type="text" class="form-control" placeholder="enter your course" ng-model="courseInputs[plan][year][quarter]">
           <span class="input-group-btn">
-            <button type="button" class="btn btn-success" ng-click="addCourse(year, quarter, courseInputs[year][quarter])">
+            <button type="button" class="btn btn-success" ng-click="addCourse(plan, year, quarter, courseInputs[plan][year][quarter])">
               <i class="glyphicon glyphicon glyphicon-plus-sign"></i>
             </button>  
           </span>

@@ -9,26 +9,22 @@
  */
 angular.module('vsaWebApp')
   .controller('MainCtrl', function ($scope , $http, data) {
-    // $scope.output = data.getResult().plans;
     $scope.schools = data.getSchoolNames();
     $scope.school = $scope.schools[0];
     $scope.majors = data.getMajors();
     $scope.major = $scope.majors[0];
     var plans = data.getPlans();
     $scope.schoolPlans = plans[$scope.school.id][$scope.major.id];
-
-    $scope.electiveCourses = {};
-    $scope.courseInputs = {
-        2017: {
-            Fall:[],
-            Spring:[],
-            Summer:[],
-            Winter:[]
-        }
+    
+    $scope.init = function(){
+        $scope.electiveCourses = {};
+        $scope.courseInputs = {};
+        $scope.output = {};
     };
-    $scope.deleteCourse = function(targetObj, year, quarterName, index){
-        targetObj[year][quarterName].splice(index, 1);
-    	//$scope.output[planName][quarterName]["coursesSuggested"].splice(index, 1);
+    $scope.init();
+    
+    $scope.deleteCourse = function(targetObj, planId, year, quarterName, index){
+        targetObj[planId][year][quarterName].splice(index, 1);
     };
 
     $scope.changeSchool = function(value){
@@ -36,24 +32,31 @@ angular.module('vsaWebApp')
         $scope.schoolPlans = plans[$scope.school.id][$scope.major.id];
         getPlans($scope.schoolPlans, 0);
         // console.log($scope.schoolPlans);
+        $scope.init();
     };
     $scope.changeMajor = function(value){
         $scope.major = value;
         $scope.schoolPlans = plans[$scope.school.id][$scope.major.id];
         getPlans($scope.schoolPlans, 0);
         // console.log($scope.schoolPlans);
+        $scope.init();
     };
 
-    $scope.addCourse = function(year, quarter, value){
+    $scope.addCourse = function(planId, year, quarter, value){
         if(value == "" || value == undefined) {return;}
-        if($scope.electiveCourses[year] == undefined) {
-             $scope.electiveCourses[year] = {};
+        if($scope.electiveCourses[planId] == undefined) {
+             $scope.electiveCourses[planId] = {};
         }
-        if( $scope.electiveCourses[year][quarter] == undefined) {
-             $scope.electiveCourses[year][quarter] = [];
+        if($scope.electiveCourses[planId][year] == undefined) {
+             $scope.electiveCourses[planId][year] = {};
+        }
+        if( $scope.electiveCourses[planId][year][quarter] == undefined) {
+             $scope.electiveCourses[planId][year][quarter] = [];
         }
 
-         $scope.electiveCourses[year][quarter].push(value);
+         $scope.electiveCourses[planId][year][quarter].push(value);
+         $scope.courseInputs[planId][year][quarter] = "";
+         console.log($scope.electiveCourses);
     }
 
     /**
@@ -94,10 +97,23 @@ angular.module('vsaWebApp')
         $http.get(url)
         .then(function(result) {
             $scope.output[planId] = transformApi(result.data);
+            if ($scope.courseInputs[planId] == undefined) {
+                $scope.courseInputs[planId] = {};
+            }
+            var years = Object.keys($scope.output[planId]);
+            for(var i=0; i<years.length; i++) {
+                $scope.courseInputs[planId][years[i]] = {
+                    Fall:[],
+                    Spring:[],
+                    Summer:[],
+                    Winter:[]
+                };
+            }
             if(index+1 < planIds.length){
                 getPlans(planIds, index+1);
             }
-            // console.log($scope.output);        
+            // console.log($scope.output); 
+            // console.log($scope.courseInputs);
         }, function(error){
             console.log(error);
         });
