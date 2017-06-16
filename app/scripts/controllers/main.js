@@ -88,6 +88,7 @@ angular.module('vsaWebApp')
     };
 
     var getPlans = function(planIds, index){
+        $scope.showLoader = true;
         if(index == 0 ){
             $scope.output = {};    
         }
@@ -112,6 +113,7 @@ angular.module('vsaWebApp')
             if(index+1 < planIds.length){
                 getPlans(planIds, index+1);
             }
+            $scope.showLoader = false;
             // console.log($scope.output); 
             // console.log($scope.courseInputs);
         }, function(error){

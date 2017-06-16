@@ -81,3 +81,9 @@ body {
     border-bottom: 0;
   }
 }
+
+.load-center{
+  position: absolute;
+  left: 40%;
+  top: 15%;
+}
